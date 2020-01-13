@@ -1,0 +1,150 @@
+//POLYNOMIAL EVALUATION USING CIRCULAR LINKED LIST
+#include<iostream>
+#include<math.h>
+using namespace std;
+
+class term					//creating class for term
+{
+        public:
+                int exp;
+                int coef;
+                term *next;
+                friend class poly;		
+
+};
+
+class poly					//creating class for polynomial
+{
+  term *h;
+        public:
+                poly();
+                void create_poly();
+                void display_poly();
+                void add_poly(poly,poly);
+                void eval_poly();
+};
+
+poly::poly()					//default constructor
+{
+  h=new term();
+  h->exp=-1;
+  h->next=h;
+}
+
+void poly::create_poly()
+{
+        term *last,*p;
+        int n,i;
+        last=h;
+        cout<<"\nEnter the size of the expression:";			//accepting the no. of terms
+        cin>>n;
+        for(i=0;i<n;i++)
+        {
+                p=new term();
+                p->next=h;
+                cout<<"Enter the coefficient and exponent of "<<i+1<<"place:\n";	//accepting the polynomial expression
+                cin>>p->coef>>p->exp;
+                last->next=p;
+                last=p;
+        }
+}
+
+void poly::display_poly()						//function for displaying the polynomial
+{
+        term *temp;
+        temp=h->next;
+        while(temp->exp!=-1)
+        {
+                cout<<"("<<temp->coef<<".x^"<<temp->exp<<")"<<"+";
+                temp=temp->next;
+        }
+  cout<<"0\n";
+}
+
+void poly::add_poly(poly p1,poly p2)			//addition of polynomial1 and polynomial2 and storing the result in polynomial3
+{
+        term *t1,*t2,*t3,*temp;
+        t1=p1.h->next;
+        t2=p2.h->next;
+        t3=h;
+        while(t1->exp!=-1||t2->exp!=-1)
+        {
+                temp=new term();
+                if(t1->exp==t2->exp)
+                {
+                        temp->coef=t1->coef+t2->coef;
+                        temp->exp=t1->exp;
+                        t3->next=temp;
+                        t3=t3->next;
+                        t2=t2->next;
+                        t1=t1->next;
+                }
+                else if(t1->exp>t2->exp)
+                {
+                        t3->next=t1;
+                        t3=t3->next;
+                        t1=t1->next;
+                }
+                else
+                {
+                        t3->next=t2;
+                        t3=t3->next;
+                        t2=t2->next;
+                }
+        }
+t3->next=h;     
+}
+
+void poly::eval_poly()				//evaluating the polynomial for a value x
+{
+        term *temp;
+        temp=h->next;
+        int n,sum=0;
+        cout<<"\nEnter the value of x:";
+        cin>>n;
+        while(temp->exp!=-1)
+        {
+                sum=sum+(temp->coef)*(pow(n,temp->exp));
+                temp=temp->next;
+        }
+  cout<<"\nResult of evaluation is:"<<sum;
+}
+int main()
+{
+        poly p1,p2,p3;
+        int q;
+        do
+        {
+                cout<<"\n1.Create Polynomial\n2.Display Polynomial\n3.Addition of polynomials\n4.Evaluation of polynomials";
+                cout<<"\nEnter your choice:";
+                cin>>q;
+                switch(q)
+                {
+                        case 1:
+                                p1.create_poly();
+                                break;
+                        case 2:
+                                cout<<"The polynomial is:";
+                                p1.display_poly();
+                                break;
+                        case 3:
+                                cout<<"Enter the 2nd polynomial";
+                                p2.create_poly();
+                                p1.display_poly();
+                                p2.display_poly();
+                                p3.add_poly(p1,p2);
+                                cout<<"Addition of p1 and p2 is:";
+                                p3.display_poly();
+                                break;
+                        case 4:
+                                p1.eval_poly();
+                                break;
+                        case 0:
+                                break;
+                        default:
+                                break;
+
+                }
+        }while(q!=5);
+}
+
