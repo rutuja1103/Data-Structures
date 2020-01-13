@@ -1,0 +1,74 @@
+//NAME: RUTUJA BHANDIGANI
+//BASIC QUEUE OPERATIONS
+
+#include<stdio.h>
+#define size 5
+int Q[size];
+int f=-1;
+int r=-1;
+int Qfull()
+{
+	if(r==size-1)
+		return 1;
+	else
+		return 0;
+}
+int Qempty()
+{
+	if((f==-1&&r==-1)||(f>r))
+		return 1;
+	else
+		return 0;
+}
+void insert(int item)
+{
+	if(f==-1)
+		f=(f+1)%size;
+	r=(r+1)%size;
+	Q[r]=item;
+
+}
+int delete()
+{
+	int temp;
+	temp=Q[f];
+	f++;
+	return temp;
+}
+void display()
+{
+	int i;
+	printf("\nElements of the queue are:");
+	for(i=f;i<=r;i++)
+		printf("%d",Q[i]);	
+}
+
+int main()
+{
+int elem,i,t;
+
+/*for(i=0;i<size;i++)
+{
+	Q[i]=NULL;
+}*/
+
+
+while(!Qfull())
+{
+	printf("\nEnter elements of the queue:");
+	scanf("%d",&elem);
+	insert(elem);
+	display();
+}
+
+
+while(!Qempty())
+{
+	t=delete();
+	printf("\nDeleted elem:");
+	printf("%d",t);
+	display();	
+}
+
+return 0;
+}
