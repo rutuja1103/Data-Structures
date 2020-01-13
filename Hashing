@@ -1,0 +1,181 @@
+//NAME: RUTUJA BHANDIGANI
+//HASHING: LINEAR PRROBING WITH REPLACEMENT, LINEAR PROBING WITHOUT REPLACEMENT
+#include<iostream>
+using namespace std;
+#include<string.h>
+#define MAX 10
+
+class student
+{
+        public:
+        int roll_no;
+        string name;
+        char grade;
+        student();
+        friend class hashing;
+        
+};
+
+student::student()
+{
+        name="---";
+        roll_no=-1;
+        grade='-';
+}
+
+class hashing
+{
+        student hashtable[MAX];
+        public:
+                void linear_r();
+                void linear_wr();
+                void display();
+};
+
+void hashing::display()                                                                 //Displaying the hashtable
+{
+        
+        cout<<"\tRoll no\tName\tGrade\t\n";
+        for(int i=0;i<10;i++)
+        {
+                cout<<i<<"\t"<<hashtable[i].roll_no<<"\t"<<hashtable[i].name<<"\t"<<hashtable[i].grade<<"\t"<<"\n";
+        }
+}
+
+void hashing::linear_wr()									//linear probing without replacement
+{
+        char ch;
+        int loc;
+        int i=0;
+        int flag=0;
+        int temp_rno;
+        string temp_name;
+        char temp_grade;
+        do
+        {
+                cout<<"Enter student details\n";                                               //accepting student details
+                cout<<"Enter student roll no\t";
+                cin>>temp_rno;
+                cout<<"Enter student name\t";
+                cin>>temp_name;
+                cout<<"Enter student grade\t";
+                cin>>temp_grade;
+                
+                loc=temp_rno%10;                                                              //searching the location to store contents
+                if(hashtable[loc].roll_no==-1)
+                {
+                        hashtable[loc].roll_no=temp_rno;
+                        hashtable[loc].name=temp_name;
+                        hashtable[loc].grade=temp_grade;
+                }
+                else
+                {
+                
+                        i=(loc+1)%MAX;
+                        while(i!=loc)
+                        {
+                                if(hashtable[i].roll_no==-1)
+                                {
+                                        hashtable[i].roll_no=temp_rno;
+                                        hashtable[i].name=temp_name;
+                                        hashtable[i].grade=temp_grade;
+                                        flag=1;
+                                        break;
+                                }
+                                else
+                                        i=(i+1)%MAX;
+                                        
+                        }
+                        if(flag!=1)
+                        {
+                                cout<<"Hashtable is full\n";
+                        }
+                }
+                
+               cout<<"Do you want to continue?(y/n)";
+               cin>>ch;
+         }while(ch=='y');
+}
+                                        
+void hashing::linear_r()							//linear probing with replacement
+{
+        char ch;
+        int loc,newloc;
+        int i=0;
+        int flag=0;
+        student s,temp;
+        do
+        {
+                cout<<"Enter student details\n";
+                cout<<"Enter student roll no\t";
+                cin>>s.roll_no;
+                cout<<"Enter student name\t";
+                cin>>s.name;
+                cout<<"Enter student grade\t";
+                cin>>s.grade;
+                
+                loc=s.roll_no%10;
+                if(hashtable[loc].roll_no==-1)
+                {
+                        hashtable[loc]=s;
+                }
+                else
+                {
+                        newloc=hashtable[loc].roll_no%MAX;                            
+                        temp=s;
+                        if(newloc!=loc)                                         //if current contents do not belong to the location
+                        {
+                                temp=hashtable[loc];
+                                hashtable[loc]=s;
+                        }
+                        i=(loc+1)%MAX;
+                        while(i!=loc)                                 //if location is not free inserting the contents in the next location
+                        {
+                                if(hashtable[i].roll_no==-1)
+                                {
+                                        hashtable[i].roll_no=temp.roll_no;
+                                        hashtable[i].name=temp.name;
+                                        hashtable[i].grade=temp.grade;
+                                        flag=1;
+                                        break;
+                                }
+                                else
+                                        i=(i+1)%MAX;
+                                        
+                        }
+                        if(flag!=1)
+                        {
+                                cout<<"Hashtable is full\n";
+                        }
+                }
+                
+               cout<<"Do you want to continue?(y/n)";
+               cin>>ch;
+         }while(ch=='y');
+}                     
+                         
+int main()
+{
+        hashing h;
+        int q;
+	do
+	{
+		cout<<"\n1.LINEAR PROBING WITHOUT REPLACEMENT\n2.LINEAR PROBING WITH REPLACEMENT\n";
+		cout<<"Enter your choice";
+		cin>>q;
+		switch(q)
+		{
+			case 1: cout<<"LINEAR PROBING WITHOUT REPLACEMENT\n";
+				h.linear_wr();
+				h.display();
+				break;
+			case 2: cout<<"LINEAR PROBING WITH REPLACEMENT\n";
+			        h.linear_r();
+				h.display();
+				break;
+			
+			default: return 0;
+		}
+	}while(q!=0);
+}
+
