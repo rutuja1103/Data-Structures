@@ -1,0 +1,293 @@
+//NAME:RUTUJA BHANDIGANI
+//STRING OPERATIONS
+
+#include<stdio.h>
+#include<string.h>								//declaring header files
+
+
+void accept(char *s1,char *s2,char *s3)						//accepting the strings from user
+{
+	printf("Enter the 1st string");
+	scanf("%s",s1);
+	printf("Enter the 2nd string");
+	scanf("%s",s2);
+	printf("Enter the 3rd string");
+	scanf("%s",s3);
+}
+
+void display(char *s1,char *s2,char *s3)					//displaying the entered strings
+{
+	printf("\n1st string is:%s",s1);
+	printf("\n2nd string is:%s",s2);
+	printf("\n3rd string is:%s",s3);
+}
+
+int stlen1(char *s1)								//calculating the length of string 1
+{
+        *s1=s1[0];
+         int count=0;
+	while(*s1!='\0')
+		{
+			count++;
+			s1++;
+		}
+	return count;
+}
+
+void displen1(int l1)								//displaying the length of string 1
+{
+	printf("Length of 1st string is:%d\n",l1);
+}
+
+int stlen2(char *s2)								//calculating the length of string 2
+{
+        *s2=s2[0];
+         int count=0;
+	 while(*s2!='\0')
+	 {
+		count++;
+		s2++;
+	 }
+         return count;
+}
+
+void displen2(int l2)								//displaying the length of string 2
+{
+	printf("Length of 2nd string is:%d\n",l2);
+}
+
+int stlen3(char *s3)								//calculating the length of string 3
+{
+        *s3=s3[0];
+         int count=0;
+	 while(*s3!='\0')
+          {
+          	count++;
+                s3++;
+	  }
+         return count;
+}
+
+void displen3(int l3)								//displaying the length of string 3
+{
+
+         printf("Length of 3rd string is:%d\n",l3);
+}
+
+void copy(char *s1,char *s2)							//copying contents of string 1 into string 2
+{
+         while(*s1!='\0')
+         {
+         	*s2=*s1;
+                 s2++;
+                 s1++;
+                 *s2='\0';
+         }
+}
+
+void concat(char *s1,char *s2)							//concatenation of string 1 and string 2
+{
+        *s1=s1[0];
+        *s2=s2[0];
+        while(*s1!='\0')
+                s1++;
+        while(*s2!='\0')
+        {
+                *s1=*s2;
+                s1++;
+                s2++;
+                *s1='\0';
+        }
+}
+
+void reverse (char *s3,char *s4,int l3)						//reversing the contents of string 3 and storing in string 4
+{
+    int i=0;
+    while(*s3!='\0')
+        s3++;
+    s3--;
+    while(i<l3)
+    {
+        *s4=*s3;
+        s4++;
+        s3--;
+        i++;
+    }
+    *s4='\0';
+}
+
+void disprev(char *s4)								//displaying the reversed string
+{
+    printf("\nReversed string of s3:%s\n",s4);
+}
+
+int compare(char *s1,char *s2)							//comparing string 1 and string 2 by ascii values
+{
+    int t1=0;
+    int t2=0;
+    while(*s1!='\0')
+    {
+        t1=t1+(*s1);
+        s1++;
+    }
+
+    while(*s2!='\0')
+    {
+        t2=t2+(*s2);
+        s2++;
+    }
+
+    if(t1==t2)
+        return 0;
+    else if(t1>t2)
+        return 1;
+    else
+        return -1;
+}
+
+void dispcmp(int c)
+{
+    if(c==0)
+        printf("\ns1 and s2 are equal\n");
+    else if(c==1)
+        printf("\ns1 is greater than s2\n");
+    else if(c==-1)
+    printf("\ns1 is less than s2\n");
+
+}
+
+int pal(char  s1[25], int l1)							//checking if string 3 is a palindrome
+{
+    int i,c;
+    for(i=0;i<l1/2;i++)
+    {
+        if(s1[i]==s1[l1-1-i])
+        {
+            c=1;
+        }
+        else
+        {
+            c=0;
+            break;
+        }
+    }
+    return c;
+}
+
+void disppal(int c)
+{
+    if(c==1)
+        printf("\ns1 is a palindrome\n");
+    else
+        printf("\ns1 is not a palindrome\n");
+}
+
+void substring(char s1[25],char s3[25])						//checking if string 1 is a substring of tring 2
+{
+    int i=0; int flag=0;
+    int count=0;
+    while(s1[i]!='\0')
+    {
+        int j=0;
+        while(s3[j]!='\0' && s1[i]!='\0')
+        {
+            if(s1[i]==s3[j])
+            {
+                i++;
+                j++;
+            }
+            else
+            {
+                i++;
+                j=0;
+            }
+        }
+        if(s3[j]=='\0')
+            {
+            flag=1;
+            count++;
+            printf("Substring found");
+            printf("\nFrequency of substring:%d\n",count);
+            }
+    }
+        if(flag==0)
+            {printf("Substring not found");}
+}
+
+int main()
+{
+        int l1,l2,l3,c,q,t1,t2;
+        char s1[25],s2[25],s3[25],s4[25];
+        do
+        {
+        printf("\n0.Exit\n1.Accept\n2.Display\n3.Calculate length\n4.String compare\n5.Palindrome check\n6.Substring check\n7.String reverse\n8.String copy\n9.String concatenate\n");
+        printf("Enter your choice");
+        scanf("%d",&q);
+         switch(q)
+         {
+        case 1:
+             printf("ACCEPT\n");
+             accept(s1,s2,s3);
+             break;
+        case 2:
+             printf("DISPLAY\n");
+             display(s1,s2,s3);
+             break;
+        case 3:
+            printf("\nCALCULATING STRING LENGTH\n");
+            l1=stlen1(s1);
+            displen1(l1);
+            l2=stlen2(s2);
+            displen2(l2);
+            l3=stlen3(s3);
+            displen3(l3);
+            break;
+       
+        case 4:
+            printf("\nSTRING COMPARE\n");
+            c=compare(s1,s2);
+            dispcmp(c);
+            break;
+        case 5:
+            printf("\nPALINDROME CHECK\n");
+            l1=stlen1(s1);
+            c=pal(s1,l1);
+            disppal(c);
+            break;
+        case 6:
+            printf("\nSUBSTRING CHECK\n");
+            substring(s1,s3);
+            break;
+        case 7:
+            printf("\nSTRING REVERSE\n");
+            printf("\nInitial contents of string3:%s\n",s3);
+            l3=stlen3(s3);
+            reverse(s3,s4,l3);
+            disprev(s4);
+            break;
+        case 8:
+             printf("\nSTRING COPY\n");
+             printf("\ninitial contents\n");
+             display(s1,s2,s3);
+             copy(s1,s2);
+             printf("\ncontents after copying s1 to s2\n");
+             display(s1,s2,s3);
+             break;
+        case 9:
+            printf("\nSTRING CONCAT\n");
+            printf("\ninitial contents\n");
+            display(s1,s2,s3);
+            concat(s1,s2);
+            printf("\ncontents after concatenation of s1 with s2\n");
+            display(s1,s2,s3);
+            break;
+        case 0:
+            return 0;
+        default:
+            printf("wrong choice\n");
+
+        }
+    }while(q!='0');
+        return 0;
+
+}
