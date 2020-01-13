@@ -1,0 +1,115 @@
+//NAME: RUTUJA BHANDIGANI
+//HEAP: MIN HEAP, MAX HEAP
+#include<iostream>
+using namespace std;
+#define MAX 30
+
+class heap					
+{
+	int marks[MAX];			
+	public:
+		void max_heap();
+		void insert_max(int[],int);
+		void min_heap();
+		void insert_min(int[],int);
+};
+
+void heap::max_heap()								//function for max heap
+{
+	int i=1;
+	int m;
+	char ch;
+	do
+	{
+		cout<<"Enter marks of students:\t";
+		cin>>m;
+		marks[i]=m;
+		insert_max(marks,i);						//calling heapify function
+		i++;
+		
+		for(int j=1;j<=i-1;j++)						
+		{
+			cout<<marks[j]<<"\n";					//displaying max heap
+		}
+		cout<<"Do you want to continue? (y/n)";
+		cin>>ch;
+	}while(ch=='y');
+	cout<<"The max element is:\t"<<marks[1]<<"\n";				//displaying max element
+}
+
+void heap::insert_max(int marks[],int i)					//heapify function for max heap
+{
+	int element,j;
+	element=marks[i];
+	j=i;
+	while(j>1 && marks[j/2]<element)					//comparing the elements
+	{
+		marks[j]=marks[j/2];						//shifting elements
+		j=j/2;
+	}
+	marks[j]=element;
+	
+}
+
+void heap::min_heap()								//function for min heap
+{
+	int i=1;
+	int m;
+	char ch;
+	do
+	{
+		cout<<"Enter marks of students:\t";
+		cin>>m;
+		marks[i]=m;
+		insert_min(marks,i);						//calling heapify function
+		i++;
+		
+		for(int j=1;j<=i-1;j++)
+		{
+			cout<<marks[j]<<"\n";					//displaying min heap
+		}
+		cout<<"Do you want to continue? (y/n)";
+		cin>>ch;
+	}while(ch=='y');
+	cout<<"The min element is:\t"<<marks[1]<<"\n";				//displaying min element
+}
+
+void heap::insert_min(int marks[],int i)					//heapify function for min heap
+{
+	int element,j;
+	element=marks[i];
+	j=i;
+	while(j>1 && marks[j/2]>element)					//comparing the elements
+	{
+		marks[j]=marks[j/2];						//shifting elements
+		j=j/2;
+	}
+	marks[j]=element;
+	
+}
+
+int main()
+{
+	heap h1,h2;
+	int q;
+	do
+	{
+		cout<<"1.Max Heap\n2.Min Heap\n3.Exit\n";
+		cout<<"Enter your choice\t";
+		cin>>q;
+		switch(q)
+		{
+			case 1: cout<<"MAX HEAP\n";
+				h1.max_heap();
+				break;
+			case 2: cout<<"MIN HEAP\n";
+				h2.min_heap();
+				break;
+			case 3: return 0;
+   
+			default: return 0;
+		}
+	}while(q!=0);
+	
+}
+
