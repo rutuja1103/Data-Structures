@@ -1,0 +1,376 @@
+//TREE TRAVERSALS
+
+#include<iostream>
+using namespace std;
+class node
+{
+    char data[20];
+    node *left;
+    node *right;
+    friend class tree;
+};
+
+class tree
+{
+    public:
+    tree();
+    node *root;
+    void create_nr();
+    void create_tr_r(node *);
+    void create_tree_r();
+    void pre_r(node *);
+    void in_r(node *);
+    void post_r(node *);
+    void disp_pre_r();
+    void disp_in_r();
+    void disp_post_r();
+    void pre_nr();
+    void in_nr();
+    void post_nr();
+    void del_tree();
+};
+
+tree::tree()
+{
+    root=NULL;
+}
+
+class stack
+{
+   public:
+    	node *data[20];
+   	int top;
+        stack();
+        void push(node *);
+        node* pop();
+        int isempty();
+	friend class tree;
+       
+};
+
+stack::stack()
+{
+    top=-1;
+}
+
+void stack::push(node *temp)
+{
+    if(top!=19)
+    {
+        top++;
+        data[top]=temp;
+    }
+}
+
+node *stack::pop()
+{
+    node *temp=data[top];
+    top--;
+    return temp;
+}
+
+int stack::isempty()
+{
+    if(top==-1)
+        return 1;
+    else
+        return 0;
+}
+   
+void tree::create_nr()
+{
+    node *temp,*curr;
+    int flag=0;
+    char ch,choice;
+    do
+    {
+    if(root==NULL)
+    {
+        root=new node();
+        cout<<"\nEnter the data:\t";
+        cin>>root->data;
+        root->left=root->right=NULL;
+    }
+    else
+    {
+        temp=root;
+        curr=new node();
+        cout<<"\nEnter the data:\t";
+        cin>>curr->data;
+        curr->left=curr->right=NULL;
+   
+    while(flag==0)
+    {
+        cout<<"\nWhere do you want to attach current on\t"<<temp->data<<"l OR r";
+        cin>>ch;
+        if(ch=='l')
+        {
+            if(temp->left==NULL)
+            {
+                temp->left=curr;
+                flag=1;
+            }
+            else
+                temp=temp->left;
+        }
+        else if(ch=='r')
+        {
+            if(temp->right==NULL)
+            {
+                temp->right=curr;
+                flag=1;
+            }
+            else
+                temp=temp->right;
+        }
+    }
+        flag=0;
+    }
+    cout<<"\nDo you want to add more elements?\t(y or n)";
+    cin>>choice;
+    }while(choice=='y');
+   
+}
+
+void tree::create_tree_r()
+{
+    if(root==NULL)
+    {
+        root=new node();
+        cout<<"\nEnter the data\t";
+        cin>>root->data;
+        root->left=root->right=NULL;
+        create_tr_r(root);
+    }
+}
+
+void tree::create_tr_r(node *root)
+{
+    node *curr;
+    char ch;
+    cout<<"\nDo you want to attach a node on left side of\t"<<root->data<<"y or n";
+    cin>>ch;
+    if(ch=='y')
+    {
+        curr=new node();
+        cout<<"\nEnter the data\t";
+        cin>>curr->data;
+        curr->left=curr->right=NULL;
+       
+        if(root->left==NULL)
+        {
+            root->left=curr;
+        }
+       
+        create_tr_r(root->left);
+    }
+    cout<<"\nDo you want to attach a node on right side of\t"<<root->data<<"y or n";
+    cin>>ch;
+    if(ch=='y')
+    {
+        curr=new node();
+        cout<<"\nEnter the data\t";
+        cin>>curr->data;
+        curr->left=curr->right=NULL;
+       
+        if(root->right==NULL)
+        {
+            root->right=curr;
+        }
+       
+        create_tr_r(root->right);
+    }
+}
+
+void tree::pre_r(node *root)
+{
+    if(root!=NULL)
+    {
+        cout<<root->data;
+        pre_r(root->left);
+        pre_r(root->right);
+    }
+}
+void tree::disp_pre_r()
+{
+
+    cout<<"\nPreorder binary tree is:\t";
+    pre_r(root);
+}
+
+void tree::in_r(node *root)
+{
+    if(root!=NULL)
+    {
+        in_r(root->left);
+        cout<<root->data;
+        in_r(root->right);
+    }
+}
+void tree::disp_in_r()
+{
+    cout<<"\nInorder binary tree is:\t";
+    in_r(root);
+}
+   
+void tree::post_r(node *root)
+{
+    if(root!=NULL)
+    {
+        post_r(root->left);
+        post_r(root->right);
+        cout<<root->data;
+    }
+}
+void tree::disp_post_r()
+{
+    cout<<"\nPostorder binary tree is:\t";
+    post_r(root);
+}
+
+void tree::pre_nr()
+{
+    node *temp;
+    stack s;
+    temp=root;
+    while(1)
+    {
+        while(temp!=NULL)
+        {
+            cout<<temp->data;
+            s.push(temp);
+            temp=temp->left;
+	}
+            if(s.isempty()==1)
+                break;
+            temp=s.pop();
+            temp=temp->right;
+    }
+}
+
+
+void tree::in_nr()
+{
+    node *temp;
+    stack s;
+    temp=root;
+    while(1)
+    {
+        while(temp!=NULL)
+        {
+            s.push(temp);
+            temp=temp->left;
+	}
+            if(s.isempty()==1)
+                break;
+            temp=s.pop();
+	    cout<<temp->data;
+            temp=temp->right;
+    }
+}
+
+
+void tree::post_nr()
+{
+	node *temp;
+	stack s;
+	temp=root;
+	while(1)
+	{
+		while(temp!=NULL)
+		{
+			s.push(temp);
+			temp=temp->left;
+		}
+		if(s.data[s.top]->right==NULL)
+		{
+			temp=s.pop();
+			cout<<temp->data;
+		}
+		while(s.isempty()==0 && s.data[s.top]->right==temp)
+		{
+			temp=s.pop();
+			cout<<temp->data;
+		}
+		if(s.isempty()==1)
+		{
+			break;
+		}
+		temp=s.data[s.top]->right;
+	}
+}
+
+void tree::del_tree()
+{
+	node *temp;
+	stack s;
+	temp=root;
+	while(1)
+	{
+		while(temp!=NULL)
+		{
+			s.push(temp);
+			temp=temp->left;
+		}
+		if(s.data[s.top]->right==NULL)
+		{
+			temp=s.pop();
+			delete temp;
+		}
+		while(s.isempty()==0 && s.data[s.top]->right==temp)
+		{
+			temp=s.pop();
+			delete temp;
+		}
+		if(s.isempty()==1)
+		{
+			break;
+		}
+		temp=s.data[s.top]->right;
+	}
+	cout<<"\nTree has been deleted successfully";
+}
+int main()
+{
+    tree t;
+    int q;
+    do
+    {
+        cout<<"\n1.Create Tree (Non-recursive)\n2.Create Tree (Recursive)\n3.Display using Preorder (Recursive)\n4.Display using Inorder(Recursive)\n5.Display using Postorder (Recursive)\n6.Display using Preorder (Non-Recursive)\n7.Display using Inorder (Non-Recursive)\n8.Display using Postorder (Non-Recursive)\n9.Delete Tree";
+        cout<<"\nEnter your choice:";
+        cin>>q;
+        switch(q)
+        {
+            case 1:t.create_nr();
+                   break;
+            case 2:t.create_tree_r();
+                   break;
+            case 3:t.disp_pre_r();
+                   break;
+            case 4:t.disp_in_r();
+                   break;
+            case 5:t.disp_post_r();
+                   break;
+            case 6:cout<<"\nPreorder binary tree is:\t";
+	           t.pre_nr();
+                   break;
+	    case 7:cout<<"\nInorder binary tree is:\t";
+	           t.in_nr();
+                   break;
+	    case 8:cout<<"\nPostorder binary tree is:\t";
+		   t.post_nr();
+		   break;
+	    case 9:t.del_tree();
+		   t.disp_pre_r();
+		   break;
+
+            default:
+                   break;
+
+
+        }
+    }while(q!=0);
+}
+
+
+
