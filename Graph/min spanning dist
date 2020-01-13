@@ -1,0 +1,130 @@
+//NAME: RUTUJA BHANDIGANI
+//GRAPH: CALCULATION OF MINIMUM SPANNING DISTANCE USING PRIM'S ALGORITHM
+#include<iostream>
+using namespace std;
+
+class graph
+{
+	int v,e;
+	int cost[20][20];
+	public:
+		graph();
+		void create_adj_mat();
+		void display_adj_mat();
+		void prims_alg();
+};
+
+graph::graph()				          //default constructor									
+{
+	int i,j;
+        for(i=0;i<20;i++)
+        {
+            for(j=0;j<20;j++)
+            	cost[i][j]=999;			 //initializing the cost of all edges to infinity
+        }
+}
+
+void graph::create_adj_mat()
+{
+  int a,b,c,i;
+  cout<<"\nEnter the no. of vertices: ";
+  cin>>v;
+  cout<<"Enter the no. of edges: ";
+  cin>>e;
+  for(i=0;i<e;i++)
+  {
+    cout<<"\nEnter the starting vertex ";		//accepting the edges and their cost
+    cin>>a;
+    cout<<"\nEnter the ending vertex ";
+    cin>>b;
+    cout<<"\nEnter the cost: ";
+    cin>>c;
+    cost[a][b]=cost[b][a]=c;				//cost of edge(a,b)= cost of edge(b,a)
+  }
+}
+
+
+void graph::display_adj_mat()				//displaying the adjacency matrix
+{
+   int i,j;
+   cout<<"\nEntered matrix is:\n\n";
+   for(i=0;i<v;i++)
+   {
+     for(j=0;j<v;j++)
+     {
+        cout<<cost[i][j]<<"\t";
+     }
+     cout<<"\n";
+   }
+}
+
+void graph::prims_alg()
+{
+	int nearest[20],t[20][20],k,min,i,j,sv;
+	int mincost=0;
+	int r=0;
+  	cout<<"\nEnter the starting vertex : ";
+  	cin>>sv;
+  	nearest[sv]=-1;
+  	for(i=0;i<v;i++)
+  	{
+    		if(i!=sv)
+    		{
+      			nearest[i]=sv;					//checking the vertices adjacent to starting vertex
+    		}
+  	}
+	for(i=1;i<v;i++)
+	{
+		min=999;
+		for(k=0;k<v;k++)
+		{
+			if(nearest[k]!=-1 && cost[k][nearest[k]]<min)
+			{
+				j=k;
+				min=cost[k][nearest[k]];		//updating the cost if it is less than min
+			}
+		}
+		t[r][1]=j;
+		t[r][2]=nearest[j];
+		r=r+1;
+		mincost=mincost+cost[j][nearest[j]];
+		nearest[j]=-1;
+		
+		for(k=0;k<v;k++)
+		{
+			if(nearest[k]!=-1 && cost[k][nearest[k]]>cost[k][j])
+			{
+				nearest[k]=j;
+			}
+		}
+	}
+	
+	cout<<"\nThe Minimum Spanning tree value: "<<mincost<<"\n";
+}
+
+
+int main()
+{	
+	graph g;							//object for class graph
+	int q;
+	do
+	{
+		cout<<"\n1.Create Adjacency Matrix\n2.Display Adjacency Matrix\n3.Calculating minimum spanning distance using prim's algorithm\n";
+		cout<<"Enter your choice";
+		cin>>q;
+		switch(q)
+		{
+			case 1: cout<<"Create Adjacency Matrix\n";
+				g.create_adj_mat();
+				break;
+			case 2: cout<<"Display Adjacency Matrix\n";
+				g.display_adj_mat();
+				break;
+			case 3: cout<<"Using Prim's Algorithm\n";
+				g.prims_alg();
+				break;
+			default: return 0;
+		}
+	}while(q!=0);
+}
+
