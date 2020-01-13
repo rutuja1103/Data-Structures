@@ -1,0 +1,366 @@
+//TREE: DELETE NODE, COPY TREE, MIRROR IMAGE, BFS TRAVERSAL
+
+#include<iostream>
+#include<string>
+using namespace std;
+class node
+{
+	public:
+	string keyword;
+	string meaning;
+	node *left;
+	node *right;
+	friend class tree;
+};
+
+class tree
+{
+	public:
+	node *root;
+	tree();
+	void bst_create_r();
+	void bst_t_r(node *,node *);
+	void pre_r(node *);
+	void disp_pre_r();
+	void remove(node *);
+	void remove_node();
+	node * copy_tree(node *);
+	void copy_tr();
+	void mirror_image(node *);
+	void mirror();
+	void bfs();
+	
+};
+
+tree::tree()
+{
+	root=NULL;
+}
+
+class queue						//creating queue for BFS
+{
+	int front,rear;
+	public:
+		node *Q[20];
+		queue();
+		void insert(node *);
+		node* del();
+		int isempty();
+};
+
+queue::queue()
+{
+	front=rear=-1;
+}
+
+int queue::isempty()
+{
+	if(front==rear)
+		return 0;
+	else
+		return 1;
+}
+void queue::insert(node *temp)
+{
+	if(rear<20)
+	{
+		rear++;
+		Q[rear]=temp;
+		
+	}
+
+}
+node* queue::del()
+{
+	node *temp;
+	if(isempty()==1)
+	{
+		front++;
+		temp=Q[front];
+		return temp;
+	}
+}
+void tree::bst_create_r()					//creating BST using recursive function
+{
+	node *curr;
+	char ch;
+	do
+	{
+		if(root==NULL)
+		{
+			root=new node();
+			cout<<"\nEnter the keyword:";
+			cin>>root->keyword;
+			cout<<"\nEnter the meaning:";
+			cin>>root->meaning;
+			root->left=root->right=NULL;
+			
+		}
+		else
+		{
+			curr=new node();
+			cout<<"\nEnter the keyword:";
+			cin>>curr->keyword;
+			cout<<"\nEnter the meaning:";
+			cin>>curr->meaning;
+			curr->left=curr->right=NULL;
+			bst_t_r(root,curr);
+		}
+	cout<<"\nDo you want to continue(y/n)\t";
+	cin>>ch;
+	}while(ch=='y');
+}
+
+void tree::bst_t_r(node *root,node *curr)
+{
+	if(curr->keyword < root->keyword)
+	{
+		if(root->left==NULL)
+			root->left=curr;
+		else
+			bst_t_r(root->left,curr);
+	}
+	
+	else if(curr->keyword > root->keyword)
+	{
+		if(root->right==NULL)
+			root->right=curr;
+		else
+			bst_t_r(root->right,curr);
+	}
+	else
+		cout<<"\nDuplicate data";
+}
+
+void tree::pre_r(node *root)					//displaying BST using preorder traversal
+{
+    if(root!=NULL)
+    {
+        cout<<root->keyword<<" ";
+        pre_r(root->left);
+        pre_r(root->right);
+    }
+}
+void tree::disp_pre_r()												
+{
+
+    cout<<"\nPreorder binary tree is:\t";
+    pre_r(root);
+}
+
+void tree::remove(node *root)					//function for deleting a node
+{
+node *parent,*temp,*temp1,*temp2,*s,*curr;
+int flag=0; 
+parent=NULL;
+curr=root;
+string key;
+cout<<"Enter the node you want to delete\t";
+cin>>key;
+	while(root!=NULL)					//searching the node to be deleted
+	{
+		if(key==curr->keyword)
+		{
+			flag=1;
+			break;
+		}
+		else if(key < curr->keyword)
+		{
+			parent=curr;
+			curr=curr->left;
+		}
+		else if(key > curr->keyword)
+		{
+			parent=curr;
+			curr=curr->right;
+		}
+	}
+	if(flag==1)
+	{
+									//deleting nodes other than root node
+		if(curr->left==NULL && curr->right==NULL)
+		{
+			if(curr==parent->left)
+				parent->left=NULL;
+			else
+				parent->right=NULL;
+			delete(curr);
+			cout<<"a";
+			
+		}
+		else if(curr->left!=NULL && curr->right==NULL)
+		{
+			if(curr==parent->left)
+				parent->left=curr->left;
+			else
+				parent->right=curr->left;
+			curr->left=curr->right=NULL;
+			delete(curr);
+			cout<<"b";
+			
+		}
+		else if(curr->left==NULL && curr->right!=NULL)
+		{
+			if(curr==parent->right)
+				parent->right=curr->right;
+			else
+				parent->left=curr->right;
+			curr->left=curr->right=NULL;
+			delete(curr);
+			cout<<"c";
+			
+		}
+		else if(curr->left!=NULL && curr->right!=NULL)
+		{
+			temp1=curr->right;
+			temp2=curr->left;
+			s=temp1;
+			while(s->left!=NULL)
+			{
+				s=s->left;
+				s->left=temp2;
+				if(curr==parent->left)
+					parent->left=temp1;
+				else
+					parent->right=temp1;
+				curr->left=curr->right=NULL;
+				delete(curr);
+				cout<<"d";
+			
+			}
+		}
+		else if(curr==root)						//deleting root node
+		{
+			if(curr->right==NULL && curr->left!=NULL)
+			{
+				root=root->left;
+				curr->left=curr->right=NULL;
+				delete(curr);
+				cout<<"e";
+			
+			}
+			else if(curr->right!=NULL && curr->left==NULL)
+			{
+				root=root->right;
+				curr->left=curr->right=NULL;
+				delete(curr);
+				cout<<"f";
+				
+			}
+			else if(curr->right!=NULL && curr->left!=NULL)
+			{
+				root=root->right;
+				temp=curr->left;
+				s=root;
+				while(s->left!=NULL)
+				{
+					s=s->left;
+					s->left==temp;
+					curr->left=curr->right=NULL;
+					delete(curr);
+					cout<<"g";
+				}
+			}
+		}
+	}
+	else 
+		cout<<"\nNode not found";
+}
+void tree::remove_node()
+{
+	remove(root);
+}
+
+node* tree::copy_tree(node *root)				//copying the tree into another tree
+{
+	node *temp;
+	temp=NULL;
+	if(root!=NULL)
+	{
+		temp=new node();
+		temp->keyword=root->keyword;
+		temp->left=copy_tree(root->left);
+		temp->right=copy_tree(root->right);
+	}
+	return temp;
+}
+
+void tree::copy_tr()
+{
+	copy_tree(root);
+	disp_pre_r();
+}
+
+void tree::mirror_image(node *root)		//displaying the mirror image of the tree(left subtree <-> right subtree)
+{
+	node *temp;
+	if(root!=NULL)
+	{
+		temp=root->left;
+		root->left=root->right;
+		root->right=temp;
+		if(root->left!=NULL)
+			mirror_image(root->left);
+		if(root->right!=NULL)
+			mirror_image(root->right);
+	}
+}
+
+void tree::mirror()
+{
+	mirror_image(root);
+	disp_pre_r();
+}
+
+void tree::bfs()						//displaying the breadth first traversal
+{
+	node *temp;
+	queue q;
+	temp=root;
+	q.insert(temp);
+	while(q.isempty()==1)
+	{
+		temp=q.del();
+		cout<<"\t"<<temp->keyword;
+		if(temp->left!=NULL)
+			q.insert(temp->left);
+		if(temp->right!=NULL)
+			q.insert(temp->right);
+	}
+}
+
+
+int main()
+{	
+	tree t;
+	int q;
+	do
+	{
+		cout<<"\n1.Create Binary tree\n2.Display Binary Tree\n3.Delete a node\n4.Copy tree\n5.Mirror image of tree\n6.BFS Traversal\n";
+		cout<<"Enter your choice";
+		cin>>q;
+		switch(q)
+		{
+			case 1: cout<<"Create Binary Search Tree\n";
+				t.bst_create_r();
+				break;
+			case 2: cout<<"Display Binary Search Tree\n";
+				t.disp_pre_r();
+				break;
+			case 3: cout<<"Deleting a node\n";
+				t.remove_node();
+				cout<<"\nThe node has been deleted successfully\n";
+				break;
+			case 4: cout<<"Copying tree into another tree";
+				t.copy_tr();
+				break;
+			case 5: cout<<"Mirror image of tree\n";
+				t.mirror();
+				break;
+			case 6: cout<<"BFS traversal of tree\n";
+				t.bfs();
+				break;
+			default: return 0;
+		}
+	}while(q!=0);
+}
