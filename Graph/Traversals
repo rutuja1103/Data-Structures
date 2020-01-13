@@ -1,0 +1,331 @@
+//NAME: RUTUJA BHANDIGANI
+//GRAPH: DFS,BFS TRAVERSAL
+#include<iostream>
+using namespace std;
+
+class node
+{
+	string name;
+	node *next;
+	friend class graph;
+	friend class stack;
+  	friend class queue;
+};
+
+class graph
+{
+	node *head[20];
+	int n;
+	int visited[50];
+	public:
+		    graph();
+		    void create();
+		    void display();
+		    int search_index(node*);
+    		    void dfs_r();
+		    void DFS_r(int);
+                    void dfs_nr();
+                    void BFS();
+};
+
+graph::graph()
+{
+	for(int i=0;i<20;i++)
+	{
+		head[i]=NULL;
+	}
+}
+
+class stack
+{
+ public:
+ 	int top;
+ 	node *data[20];
+ 	stack();
+ 	void push(node *);
+	node* pop();
+ 	int isempty();
+};
+
+stack::stack()
+{
+ 	top=-1;
+}
+
+void stack::push(node *temp)
+{
+ 	if(top!=19)
+ 	{
+  		top++;
+  		data[top]=temp;
+ 	}
+}
+
+node* stack::pop()
+{
+ 	node *temp;
+ 	temp=data[top];
+	top--;
+ 	return temp;
+}
+
+int stack::isempty()
+{
+ 	if(top==-1)
+  		return 0;
+ 	else
+  		return 1;
+}
+
+class queue
+{
+  int front,rear;
+  node *que[20];
+  public:
+	 queue();
+	 void insert(node *);
+	 node* del();
+	 int isempty();
+};
+
+queue::queue()
+{
+ 	front=rear=-1;
+}
+
+void queue::insert(node *temp)
+{
+ 	rear++;
+ 	que[rear]=temp;
+}
+
+node* queue::del()
+{
+ 	front++;
+ 	return(que[front]);
+}
+
+int queue::isempty()
+{
+ 	if(front==rear)
+  		return 0;
+ 	else
+  		return 1;
+}
+
+
+void graph::create()								//creating the graph
+{
+char ch;
+int i,j;
+int flag=0;
+string name;
+node *temp,*curr;
+cout<<"Enter the number of users";
+cin>>n;
+	for(i=0;i<n;i++)
+	{
+		head[i]=new node();
+		cout<<"Enter user name\t";
+		cin>>head[i]->name;
+		head[i]->next=NULL;
+	}
+	for(i=0;i<n;i++)
+	{
+		temp=head[i];
+		do
+		{
+			cout<<"\nEnter name of friend of "<<head[i]->name<<"\t";
+			cin>>name;
+			for(j=0;j<n;j++)
+			{
+				if(name==head[j]->name && name!=head[i]->name)
+				{
+					curr=new node();
+					curr->name=name;
+					curr->next=NULL;
+					temp->next=curr;
+					temp=curr;
+					flag=1;
+					break;
+				}
+			}
+			if(flag==0)
+			{
+				if(name==head[i]->name)
+					cout<<"User can't be a friend of himself\n";		//user cant be his own friend
+				else
+					cout<<"User does not exist\n";				//non-existing user can't be a friend
+			}
+					
+			cout<<"\nDo you want to add more friends?(y/n)\t";
+			cin>>ch;
+			flag=0;
+		}while(ch=='y');
+	}
+}
+
+void graph::display()									//displaying the adjacency list
+{
+	int i;
+	node *temp;
+	for(i=0;i<n;i++)
+	{
+		cout<<"Friends of "<<head[i]->name<<" are:\n";
+		temp=head[i];
+		while(temp!=NULL)
+		{
+			cout<<temp->name<<"->";
+			temp=temp->next;
+		}
+		cout<<"\n";
+	}
+}
+
+int graph::search_index(node *temp)							//searching the index
+{
+  int i;
+  for(i=0;i<n;i++)
+  {
+    if(head[i]->name==temp->name)
+        return i;
+  }
+}
+
+void graph::dfs_r()									//DFS Recursive
+{
+	int i,index;
+	node *t;
+	t=new node();
+
+	for(i=0;i<n;i++)
+	{
+		visited[i]=0;
+	}
+	cout<<"Enter the name of starting user\t";
+	cin>>t->name;
+	index=search_index(t);
+	DFS_r(index);
+}
+
+void graph::DFS_r(int index)
+{
+	node *temp;
+	int ind;
+	cout<<head[index]->name<<"\t";
+	visited[index]=1;
+	temp=head[index];
+	while(temp!=NULL)
+	{
+		ind=search_index(temp);
+		if(visited[ind]==0)
+		{
+			DFS_r(ind);
+		}
+		temp=temp->next;
+	}
+}
+
+void graph::dfs_nr()									//DFS Non-Recursive
+{
+	node *t,*temp;
+   	int i,index;
+   	t=new node();
+   	cout<<"\nEnter the name of starting user : ";
+   	cin>>t->name;
+
+   	for(i=0;i<n;i++)
+   	{
+		visited[i]=0;
+	}
+
+   	stack s;
+   	s.push(t);
+	index=search_index(t); 
+   	visited[index]=1;
+	
+   	while(s.isempty()!=0)
+   	{
+    		t=s.pop();
+    		cout<<t->name<<"\t";
+    		index=search_index(t); 
+    		temp=head[index];
+     		while(temp!=NULL)
+     		{
+      			index=search_index(temp);
+      			if(visited[index]==0)
+      			{
+       				s.push(temp); 
+       				visited[index]=1;
+      			}
+       			temp=temp->next;
+     		} 
+   	}
+}
+void graph::BFS()								//Breadth First Traversal
+{
+        node *t,*temp;
+   	int i,index;
+	t=new node();
+        cout<<"\nEnter the name of starting User : ";
+        cin>>t->name;
+
+        for(i=0;i<n;i++)
+   	{
+   		visited[i]=0;
+   	} 
+   	queue q;
+   	q.insert(t);
+   	while(q.isempty()!=0)
+   	{
+    		t=q.del();
+    		cout<<t->name<<"\t"; 
+    		index=search_index(t);
+		visited[index]=1;
+		temp=head[index];
+    		while(temp!=NULL)
+     		{
+			index=search_index(temp);
+      			if(visited[index]==0)
+      			{
+       				q.insert(temp); 
+       				visited[index]=1;
+      			}
+       			temp=temp->next;
+     		} 
+   	}
+}
+
+
+int main()
+{	
+	graph g;							//object for class graph
+	int q;
+	do
+	{
+		cout<<"\n1.Create Graph\n2.Display Adjacency List\n3.DFS Recursive\n4.DFS Non-Recursive\n5.BFS\n";
+		cout<<"Enter your choice";
+		cin>>q;
+		switch(q)
+		{
+			case 1: cout<<"Create Graph\n";
+				g.create();
+				break;
+			case 2: cout<<"Display Adjacency List\n";
+				g.display();
+				break;
+			case 3: cout<<"DFS Recursive\n";
+				g.dfs_r();
+				break;
+			case 4: cout<<"DFS Non-Recursive\n";
+				g.dfs_nr();
+				break;
+			case 5: cout<<"BFS\n";
+				g.BFS();
+				break;
+			default: return 0;
+		}
+	}while(q!=0);
+}
+
+
